@@ -4,36 +4,26 @@ public class CartModel {
     private String name;
     private double price;
     private int quantity;
-    private int imageResId;
+    private int imageResource;
 
     public CartModel() {
-        // Required for Firebase
+        // Firebase cần constructor rỗng
     }
-    public CartModel(String name, double price, int quantity, int imageResId) {
+
+    public CartModel(String name, double price, int quantity, int imageResource) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.imageResId = imageResId;
+        this.imageResource = imageResource;
     }
 
-    // Getters & Setters
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name; }
+    public double getPrice() { return price; }
+    public int getQuantity() { return quantity; }
+    public int getImageResource() { return imageResource; }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getImageResId() {
-        return imageResId;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    public void setName(String name) { this.name = name; }
+    public void setPrice(double price) { this.price = price; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setImageResource(int imageResource) { this.imageResource = imageResource; }
 }

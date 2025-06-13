@@ -121,7 +121,7 @@
                     android:id="@+id/textSubtotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$8.99"
+                    android:text="$"
                     android:textColor="#888888"/>
             </LinearLayout>
 
@@ -144,7 +144,7 @@
                     android:id="@+id/textDelivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$3"
+                    android:text="$"
                     android:textColor="#888888"/>
             </LinearLayout>
 
@@ -175,7 +175,7 @@
                     android:id="@+id/textTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$11.99"
+                    android:text="$"
                     android:textStyle="bold"
                     android:textColor="#333333"/>
             </LinearLayout>
