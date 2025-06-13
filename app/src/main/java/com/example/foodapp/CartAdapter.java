@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,16 +38,38 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(CartViewHolder holder, int position) {
-        CartModel item = cartList.get(position);
+        CartModel item = cartList.get(position); // lấy item tại vị trí hiện tại
         holder.textName.setText(item.getName());
         holder.textPrice.setText(String.format("$%.2f", item.getPrice()));
         holder.textQuantity.setText("x" + item.getQuantity());
         // TẢI ẢNH TỪ URL
         Glide.with(holder.itemView.getContext())
-                .load(CartModel.getImageUrl()) // <-- Đường dẫn ảnh động từ Firebase
+                .load(item.getImageUrl()) // <-- Đường dẫn ảnh động từ Firebase
                 .placeholder(R.drawable.ic_launcher_background) // ảnh chờ trong lúc tải
                 .error(R.drawable.ic_error) // ảnh hiển thị nếu tải lỗi
-                .into(holder.imageFood); // imageFood là ID trong item layout
+                .into(holder.imageView); // imageFood là ID trong item layout
+
+        holder.btnPlus.setOnClickListener(v -> {
+            int quantity = item.getQuantity();
+            item.setQuantity(quantity + 1);
+            holder.textQuantity.setText(String.valueOf(item.getQuantity()));
+
+            if (quantityChangeListener != null) {
+                quantityChangeListener.onQuantityChanged(); // Gọi callback để cập nhật tổng tiền
+            }
+        });
+
+        holder.btnMinus.setOnClickListener(v -> {
+            int quantity = item.getQuantity();
+            if (quantity > 1) {
+                item.setQuantity(quantity - 1);
+                holder.textQuantity.setText(String.valueOf(item.getQuantity()));
+            }
+            if (quantityChangeListener != null) {
+                quantityChangeListener.onQuantityChanged(); // Gọi callback để cập nhật tổng tiền
+            }
+        });
+
     }
 
     @Override
@@ -58,12 +81,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         TextView textName, textPrice, textQuantity;
         ImageView imageView;
 
+        ImageButton btnMinus, btnPlus;
+
         public CartViewHolder(View itemView) {
             super(itemView);
             textName = itemView.findViewById(R.id.textName);
             textPrice = itemView.findViewById(R.id.textPrice);
             textQuantity = itemView.findViewById(R.id.textQuantity);
             imageView = itemView.findViewById(R.id.imageFood);
+            btnMinus = itemView.findViewById(R.id.btnMinus);
+            btnPlus = itemView.findViewById(R.id.btnPlus);
         }
     }
 }
