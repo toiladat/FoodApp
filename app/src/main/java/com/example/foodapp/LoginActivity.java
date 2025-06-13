@@ -42,16 +42,20 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
 
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Here you would implement your login logic (e.g., call an API)
-                    Toast.makeText(LoginActivity.this, "Login attempt with: " + email, Toast.LENGTH_SHORT).show();
-                    // For demonstration, let's assume successful login
-                    // Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    // startActivity(intent);
-                    // finish();
-                }
+//                if (email.isEmpty() || password.isEmpty()) {
+//                    Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    // Here you would implement your login logic (e.g., call an API)
+//                    Toast.makeText(LoginActivity.this, "Login attempt with: " + email, Toast.LENGTH_SHORT).show();
+//                    // For demonstration, let's assume successful login
+//                    // Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    // startActivity(intent);
+//                    // finish();
+//                }
+
+                Intent intent = new Intent(LoginActivity.this, UserpageActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

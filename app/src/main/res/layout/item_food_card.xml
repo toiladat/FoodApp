@@ -22,9 +22,11 @@
             android:layout_width="match_parent"
             android:layout_height="187dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ChicagoHotDog"
-            app:riv_corner_radius_top_left="16dp"
-            app:riv_corner_radius_top_right="16dp"
+            android:src="@drawable/chicagohotdog"
+            android:background="@drawable/rounded_top_corners"
+            android:clipToOutline="true"
+            android:outlineProvider="background"
+            android:elevation="2dp"
             tools:ignore="MissingClass" />
 
         <RelativeLayout

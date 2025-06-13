@@ -39,7 +39,7 @@ public class UserpageActivity extends AppCompatActivity {
 
         // Setup Food RecyclerView
         List<FoodItem> foodList = new ArrayList<>();
-        foodList.add(new FoodItem(R.drawable.ChicagoHotDog, "Chili Cheese Dog", "4.6", "10-15 min", "40$"));
+        foodList.add(new FoodItem(R.drawable.chicagohotdog, "Chili Cheese Dog", "4.6", "10-15 min", "40$"));
         foodList.add(new FoodItem(R.drawable.margherita, "Classic Sandwich", "4.9", "12-18 min", "35$"));
         foodList.add(new FoodItem(R.drawable.sandwich, "Pizza Slice", "4.5", "10-20 min", "25$"));
 
