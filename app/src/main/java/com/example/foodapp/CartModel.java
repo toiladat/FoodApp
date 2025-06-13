@@ -6,7 +6,10 @@ public class CartModel {
     private int quantity;
     private int imageResId;
 
-    public CartItem(String name, double price, int quantity, int imageResId) {
+    public CartModel() {
+        // Required for Firebase
+    }
+    public CartModel(String name, double price, int quantity, int imageResId) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
