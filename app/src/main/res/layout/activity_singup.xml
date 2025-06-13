@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#f5f5f5"
     tools:context=".LoginActivity"
-    android:name=".LoginActivity">
+    android:name=".SignupActivity">
 
 
     <ImageView
@@ -67,7 +67,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginTop="32dp"
         android:backgroundTint="#F75564"
-        android:text="Login"
+        android:text="Sign Up"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -137,15 +137,15 @@
             android:id="@+id/textViewNotUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You Aren't User? "
+            android:text="You Are User? "
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/textViewSignUp"
+            android:id="@+id/textViewSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign Up"
+            android:text="Sign In"
             android:textColor="#FF4081"
             android:textSize="16sp"
             android:textStyle="bold" />

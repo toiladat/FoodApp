@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FoodApp"
         tools:targetApi="31">
         <activity
+            android:name=".SingupActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
