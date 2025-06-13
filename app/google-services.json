@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "584980963057",
+    "firebase_url": "https://lhoctap-default-rtdb.firebaseio.com",
+    "project_id": "lhoctap",
+    "storage_bucket": "lhoctap.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584980963057:android:9bc7d7c198661a99a8d350",
+        "android_client_info": {
+          "package_name": "com.example.foodapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0fvuBKa05BXvPbmI3NYF-ZpGnS0it1fE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584980963057:android:719975e613744c91a8d350",
+        "android_client_info": {
+          "package_name": "vn.edu.tlu.nguyenthanhthuy.study"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0fvuBKa05BXvPbmI3NYF-ZpGnS0it1fE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
