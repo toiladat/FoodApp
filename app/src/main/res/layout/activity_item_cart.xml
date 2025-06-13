@@ -49,7 +49,7 @@
                 android:id="@+id/btnMinus"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/ic_minus"
+                android:src="@drawable/ic_remove_circle"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Decrease quantity" />
 
