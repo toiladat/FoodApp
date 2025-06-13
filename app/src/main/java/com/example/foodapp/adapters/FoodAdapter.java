@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foodapp.R; 
+import com.example.foodapp.R;
 import com.example.foodapp.models.FoodItem;
 
 import java.util.List;
