@@ -2,7 +2,6 @@ package com.example.foodapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -21,12 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Gắn xử lý khi click login
     Button btnLogin = findViewById(R.id.btnLogin);
-    btnLogin.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-      }
+    btnLogin.setOnClickListener(v -> {
+      Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+      startActivity(intent);
     });
 
     // Xử lý lề hệ thống (status bar, nav bar)
