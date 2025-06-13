@@ -56,7 +56,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
         // Nút đặt hàng
         Button btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         btnPlaceOrder.setOnClickListener(v -> {
-            Toast.makeText(CartActivity.this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show();
+
         });
     }
 
