@@ -294,7 +294,10 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
             android:clipToPadding="false"
-            tools:listitem="@layout/item_category_grid" />
+            tools:listitem="@layout/item_category_grid"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="4"
+            />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
