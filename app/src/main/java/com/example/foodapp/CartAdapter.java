@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -39,8 +41,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.textName.setText(item.getName());
         holder.textPrice.setText(String.format("$%.2f", item.getPrice()));
         holder.textQuantity.setText("x" + item.getQuantity());
-
-        holder.imageView.setImageResource(item.getImageResource());
+        // TẢI ẢNH TỪ URL
+        Glide.with(holder.itemView.getContext())
+                .load(CartModel.getImageUrl()) // <-- Đường dẫn ảnh động từ Firebase
+                .placeholder(R.drawable.ic_launcher_background) // ảnh chờ trong lúc tải
+                .error(R.drawable.ic_error) // ảnh hiển thị nếu tải lỗi
+                .into(holder.imageFood); // imageFood là ID trong item layout
     }
 
     @Override
