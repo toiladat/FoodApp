@@ -1,4 +1,4 @@
-package com.example.foodapp.models;
+package com.example.foodapp.Model;
 
 public class FoodItem {
     private int imageResId;

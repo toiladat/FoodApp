@@ -1,4 +1,4 @@
-package com.example.foodapp.adapters;
+package com.example.foodapp.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodapp.R;
-import com.example.foodapp.models.FoodItem;
+import com.example.foodapp.Model.FoodItem;
 
 import java.util.List;
 

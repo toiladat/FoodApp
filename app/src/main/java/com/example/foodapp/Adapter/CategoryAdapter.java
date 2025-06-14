@@ -1,4 +1,4 @@
-package com.example.foodapp.adapters;
+package com.example.foodapp.Adapter;
 
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodapp.R;
-import com.example.foodapp.models.CategoryItem;
+import com.example.foodapp.Model.CategoryItem;
 
 import java.util.List;
 
