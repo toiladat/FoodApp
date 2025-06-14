@@ -1,14 +1,14 @@
 {
   "project_info": {
-    "project_number": "584980963057",
-    "firebase_url": "https://lhoctap-default-rtdb.firebaseio.com",
-    "project_id": "lhoctap",
-    "storage_bucket": "lhoctap.firebasestorage.app"
+    "project_number": "870052949136",
+    "firebase_url": "https://smiling-axiom-452414-g6-default-rtdb.firebaseio.com",
+    "project_id": "smiling-axiom-452414-g6",
+    "storage_bucket": "smiling-axiom-452414-g6.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:584980963057:android:9bc7d7c198661a99a8d350",
+        "mobilesdk_app_id": "1:870052949136:android:f3a077b105dfa60e86bc15",
         "android_client_info": {
           "package_name": "com.example.foodapp"
         }
@@ -16,26 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA0fvuBKa05BXvPbmI3NYF-ZpGnS0it1fE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:584980963057:android:719975e613744c91a8d350",
-        "android_client_info": {
-          "package_name": "vn.edu.tlu.nguyenthanhthuy.study"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA0fvuBKa05BXvPbmI3NYF-ZpGnS0it1fE"
+          "current_key": "AIzaSyAAGHiEbfmr5a6A7nBwq-E1mTLpiEWBhkA"
         }
       ],
       "services": {
