@@ -53,7 +53,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
         cartAdapter = new CartAdapter(this, cartList, this);
         recyclerViewCartItems.setAdapter(cartAdapter);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String uid = "uid1"; // Dùng UID test trong Firebase
         cartRef = FirebaseDatabase.getInstance().getReference("Carts").child(uid).child("items");
 
 
@@ -73,14 +74,12 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 cartList.clear();
                 for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                    String foodId = itemSnapshot.child("foodId").getValue(String.class);
-                    int quantity = itemSnapshot.child("quantity").getValue(Integer.class);
+                    String foodId = itemSnapshot.getKey();
+                    Integer quantity = itemSnapshot.child("quantity").getValue(Integer.class);
 
-                    if (foodId == null || quantity == 0) continue;
+                    if (foodId == null || quantity == null || quantity == 0) continue;
 
-                    // Lấy thông tin từ "Foods"
                     DatabaseReference foodRef = FirebaseDatabase.getInstance().getReference("Foods").child(foodId);
-                    DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("Carts");
                     foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot foodSnapshot) {
@@ -92,11 +91,16 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
                                 if (price == null) price = 0.0;
 
                                 CartItemModel model = new CartItemModel();
-                                FoodModel food = model.getFood();
                                 model.setQuantity(quantity);
-                                food.setTitle(title);
-                                food.setImagePath(image);
+
+                                // ✅ Tạo mới và gán FoodModel
+                                FoodModel food = new FoodModel();
+                                food.setTitle(title != null ? title : "");
+                                food.setImagePath(image != null ? image : "");
                                 food.setPrice(price);
+
+
+                                model.setFood(food); // ✅ Gán food vào model
 
                                 cartList.add(model);
                                 cartAdapter.notifyDataSetChanged();
@@ -118,6 +122,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
             }
         });
     }
+
+
 
 
     private void updateSummary() {
