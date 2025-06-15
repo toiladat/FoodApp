@@ -1,8 +1,10 @@
 package com.example.foodapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
     private RecyclerView recyclerViewCartItems;
     private CartAdapter cartAdapter;
 
+    private ImageView iconBack;
+
     private static final double DELIVERY_FEE = 3.00;
 
     private DatabaseReference cartRef;
@@ -45,6 +49,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
         textSubtotal = findViewById(R.id.textSubtotal);
         textDelivery = findViewById(R.id.textDelivery);
         textTotal = findViewById(R.id.textTotal);
+        iconBack = findViewById(R.id.iconBack);
 
         recyclerViewCartItems = findViewById(R.id.recyclerViewCartItems);
         recyclerViewCartItems.setLayoutManager(new LinearLayoutManager(this));
@@ -60,6 +65,13 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
 
         // Gọi hàm tải dữ liệu từ Firebase
         loadCartFromFirebase();
+
+        // Nút quay lại trang chủ
+        iconBack.setOnClickListener(v -> {
+            Intent intent = new Intent(CartActivity.this, UserpageActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         // Nút đặt hàng
         Button btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
