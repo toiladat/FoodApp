@@ -21,6 +21,8 @@ import com.example.foodapp.Adapter.FoodAdapter;
 import com.example.foodapp.Model.CategoryItem;
 import com.example.foodapp.Model.FoodItem;
 import com.example.foodapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ import java.util.List;
 
 public class UserpageActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
     private RecyclerView recyclerViewFoods, recyclerViewCategories;
     private FoodAdapter foodAdapter;
     private CategoryAdapter categoryAdapter;
@@ -36,37 +37,71 @@ public class UserpageActivity extends AppCompatActivity {
 
     private ImageButton buttonCart;
 
-    ImageView btnLogout;
+    private ImageView btnLogout;
     private static final String TAG = "UserPage";
+
+    private FirebaseAuth mAuth; // Thêm biến FirebaseAuth
+    private DatabaseReference mUsersRef; // Thêm biến tham chiếu đến nút "Users"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userpage);
 
+        // Khởi tạo Firebase Auth và Database Reference
+        mAuth = FirebaseAuth.getInstance();
+        mUsersRef = FirebaseDatabase.getInstance().getReference("Users");
+
         initViews();
+
+        // Tải dữ liệu tĩnh (đồ ăn, danh mục)
         loadFoodList();
         loadCategoryList();
 
-        // Lấy UID đã lưu sau khi đăng nhập
-        String uid = getSharedPreferences("MyApp", MODE_PRIVATE).getString("uid", null);
+        // Thiết lập sự kiện cho nút Logout
+        setupLogoutButton();
+    }
 
-        if (uid == null) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Kiểm tra trạng thái người dùng mỗi khi Activity được hiển thị
+        checkUserStatus();
+    }
+
+    private void checkUserStatus() {
+        // HỎI TRỰC TIẾP FIREBASE AUTHENTICATION
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            // Trường hợp 1: Không có ai đăng nhập
             Toast.makeText(this, "Bạn chưa đăng nhập.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(UserpageActivity.this, LoginActivity.class));
-            finish();
-            return;
-        }
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-
-        loadUserName(uid);
-
-        btnLogout.setOnClickListener(v -> {
-            getSharedPreferences("FoodApp", MODE_PRIVATE).edit().remove("uid").apply();
-
+            // Chuyển về Login và xóa hết các activity cũ
             Intent intent = new Intent(UserpageActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa stack trước
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish(); // Đóng UserpageActivity
+        } else {
+            // Trường hợp 2: Có người dùng đang đăng nhập
+            // -> Lấy UID trực tiếp từ currentUser và tải thông tin
+            String uid = currentUser.getUid();
+            Log.d(TAG, "User " + uid + " is logged in. Loading user name.");
+            loadUserName(uid);
+        }
+    }
+
+    private void setupLogoutButton() {
+        btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            // GỌI HÀM ĐĂNG XUẤT CHUẨN CỦA FIREBASE
+            mAuth.signOut();
+
+            // Sau khi đăng xuất, AuthState sẽ tự động thay đổi
+            // Chuyển người dùng về trang Login
+            Toast.makeText(this, "Đã đăng xuất.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(UserpageActivity.this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         });
@@ -89,7 +124,8 @@ public class UserpageActivity extends AppCompatActivity {
     }
 
     private void loadUserName(String uid) {
-        mDatabase.child(uid).child("name").get()
+        // Dùng biến mUsersRef đã khởi tạo
+        mUsersRef.child(uid).child("name").get()
                 .addOnSuccessListener(snapshot -> {
                     if (snapshot.exists()) {
                         textViewUserName.setText(snapshot.getValue(String.class));
@@ -102,7 +138,6 @@ public class UserpageActivity extends AppCompatActivity {
                     Log.e(TAG, "Lỗi khi load tên người dùng", e);
                 });
     }
-
     private void loadFoodList() {
         List<FoodItem> foodList = new ArrayList<>();
         foodList.add(new FoodItem(R.drawable.chicagohotdog, "Chili Cheese Dog", "4.6", "10-15 min", "40$"));

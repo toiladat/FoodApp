@@ -27,11 +27,20 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // Gắn xử lý khi click login
+        Button btnSignup = findViewById(R.id.btnSignup);
+        btnSignup.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SingupActivity.class);
+            startActivity(intent);
+        });
+
         // Xử lý lề hệ thống (status bar, nav bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
     }
 }

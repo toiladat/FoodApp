@@ -1,6 +1,7 @@
 package com.example.foodapp.Activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,10 +54,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
         cartAdapter = new CartAdapter(this, cartList, this);
         recyclerViewCartItems.setAdapter(cartAdapter);
 
-//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String uid = "uid1"; // Dùng UID test trong Firebase
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Log.d("CartActivity", "User ID: " + uid);
         cartRef = FirebaseDatabase.getInstance().getReference("Carts").child(uid).child("items");
-
 
         // Gọi hàm tải dữ liệu từ Firebase
         loadCartFromFirebase();
