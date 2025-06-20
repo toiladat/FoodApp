@@ -1,5 +1,6 @@
 package com.example.foodapp.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.foodapp.Model.FoodModel;
 import com.example.foodapp.R;
-import com.example.foodapp.Model.FoodItem;
 
 import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder> {
 
-    private List<FoodItem> foodList;
+    private List<FoodModel> foodList;
+    private Context context;
 
-    public FoodAdapter(List<FoodItem> foodList) {
+    public FoodAdapter(Context context, List<FoodModel> foodList) {
+        this.context = context;
         this.foodList = foodList;
     }
+
 
     @NonNull
     @Override
@@ -33,15 +38,17 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.FoodViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
-        FoodItem foodItem = foodList.get(position);
-        holder.imageViewFood.setImageResource(foodItem.getImageResId());
-        holder.textViewFoodName.setText(foodItem.getName());
-        holder.textViewRating.setText(foodItem.getRating());
-        holder.textViewDeliveryTime.setText(foodItem.getDeliveryTime());
-        holder.textViewPrice.setText(foodItem.getPrice());
+        FoodModel foodItem = foodList.get(position);
+        Glide.with(context)
+                .load(foodItem.getImagePath())
+                .placeholder(R.drawable.margherita)
+                .into(holder.imageViewFood);
+        holder.textViewFoodName.setText(foodItem.getTitle());
+        holder.textViewRating.setText(String.valueOf(foodItem.getStar()));
+        holder.textViewPrice.setText("$" + String.valueOf(foodItem.getPrice()));
 
         holder.buttonAdd.setOnClickListener(v -> {
-            Toast.makeText(holder.itemView.getContext(), "Added " + foodItem.getName() + " to cart", Toast.LENGTH_SHORT).show();
+            Toast.makeText(holder.itemView.getContext(), "Added " + foodItem.getTitle() + " to cart", Toast.LENGTH_SHORT).show();
 
         });
     }

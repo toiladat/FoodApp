@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Thông tin chào mừng -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +32,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/textViewTime"
+                android:layout_below="@id/textViewTime"
                 android:layout_marginTop="4dp"
                 android:orientation="vertical">
 
@@ -62,9 +63,9 @@
                 android:src="@drawable/logout"
                 android:padding="8dp"
                 android:contentDescription="Next Page" />
-
         </RelativeLayout>
 
+        <!-- Thanh tìm kiếm + giỏ hàng -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -123,9 +124,9 @@
                 android:contentDescription="Shopping Cart"
                 android:scaleType="centerInside"
                 android:padding="12dp" />
-
         </LinearLayout>
 
+        <!-- Bộ lọc Location, Time, Price -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -135,6 +136,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
+            <!-- Location -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -147,8 +149,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/location"
-                    android:contentDescription="Location Icon"
-                 />
+                    android:contentDescription="Location Icon" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -156,7 +157,6 @@
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_marginStart="4dp" />
-
                 <Spinner
                     android:id="@+id/spinnerLocation"
                     android:layout_width="0dp"
@@ -165,9 +165,10 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/rounded_filter_options"
                     android:padding="8dp"
-                    android:spinnerMode="dropdown" /> />
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
 
+            <!-- Time -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -181,8 +182,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/time"
-                    android:contentDescription="Time Icon"
-                 />
+                    android:contentDescription="Time Icon" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -198,9 +198,10 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/rounded_filter_options"
                     android:padding="8dp"
-                    android:spinnerMode="dropdown" /> />
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
 
+            <!-- Price -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -214,8 +215,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/dollar"
-                    android:contentDescription="Price Icon"
-                 />
+                    android:contentDescription="Price Icon" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -231,12 +231,11 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/rounded_filter_options"
                     android:padding="8dp"
-                    android:spinnerMode="dropdown" /> />
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
-
         </LinearLayout>
 
-
+        <!-- Today's Best Foods -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -261,21 +260,22 @@
                 android:textColor="#E91E63"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
         </RelativeLayout>
 
+        <!-- RecyclerView danh sách món -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewFoods"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:clipToPadding="false"
+            android:orientation="horizontal"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="horizontal"
             tools:listitem="@layout/item_food_card" />
 
+        <!-- Choose Category -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -297,8 +297,6 @@
             android:clipToPadding="false"
             tools:listitem="@layout/item_category_grid"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="4"
-            />
-
+            app:spanCount="4" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

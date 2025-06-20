@@ -1,20 +1,16 @@
-# Gradle
-.gradle/
-build/
-.externalNativeBuild/
-.cxx/
-
-# Local configuration
-local.properties
-
-# IntelliJ
 *.iml
-.idea/
-
-# OS generated
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
 .DS_Store
-
-# Android Studio captures
-captures/
-
-# Others
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+.idea/
