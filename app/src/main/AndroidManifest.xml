@@ -27,6 +27,8 @@
             android:name=".Activity.FoodListActivity"
             android:exported="false" />
 
+        <activity android:name=".Activity.FoodDetailActivity" />
+
         <!-- Đây là activity chính của app -->
         <activity
             android:name=".Activity.MainActivity"

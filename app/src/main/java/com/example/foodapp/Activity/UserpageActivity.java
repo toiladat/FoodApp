@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,9 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodapp.Adapter.CategoryAdapter;
 import com.example.foodapp.Adapter.FoodAdapter;
-import com.example.foodapp.Adapter.FoodListAdapter;
 import com.example.foodapp.Model.CategoryItem;
-import com.example.foodapp.Model.FoodItem;
 import com.example.foodapp.Model.FoodModel;
 import com.example.foodapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +40,7 @@ public class UserpageActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mUsersRef;
 
-    private List<FoodItem> foodList = new ArrayList<>(); // ✅ Thêm biến danh sách món ăn
+    private List<FoodModel> foodList = new ArrayList<>(); // ✅ Thêm biến danh sách món ăn
 
     private static final String TAG = "UserPage";
 

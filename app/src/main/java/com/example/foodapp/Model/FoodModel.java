@@ -1,6 +1,7 @@
 package com.example.foodapp.Model;
 
 public class FoodModel {
+    private String foodId;
     private String Title;
     private String Description;
     private String ImagePath;
@@ -10,6 +11,14 @@ public class FoodModel {
     private boolean BestFood;
 
     public FoodModel() {}
+
+    // 🆕 Getter & Setter cho foodId
+    public String getFoodId() {
+        return foodId;
+    }
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
+    }
 
     // Getter & Setter
     public String getTitle() { return Title; }

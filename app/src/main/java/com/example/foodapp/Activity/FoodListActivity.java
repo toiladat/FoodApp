@@ -1,7 +1,10 @@
 package com.example.foodapp.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -9,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.foodapp.Model.FoodItem;
-import com.example.foodapp.Adapter.FoodAdapter;
 import com.example.foodapp.Model.FoodModel;
 import com.example.foodapp.R;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +30,7 @@ public class FoodListActivity extends AppCompatActivity {
     private FoodListAdapter adapter;
     private TextView tvTitle;
 
+    private ImageButton btnBack;
     private List<FoodModel> foodList = new ArrayList<>();
 
 
@@ -40,6 +42,7 @@ public class FoodListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewFood);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         tvTitle = findViewById(R.id.tvTitle);
+        btnBack = findViewById(R.id.btnBack);
 
         foodList = new ArrayList<>();
         adapter = new FoodListAdapter(this, foodList);
@@ -47,6 +50,12 @@ public class FoodListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         loadFoodsFromFirebase();
+
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(FoodListActivity.this, UserpageActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void loadFoodsFromFirebase() {
@@ -60,6 +69,7 @@ public class FoodListActivity extends AppCompatActivity {
                         foodList.clear();
                         for (DataSnapshot foodSnap : snapshot.getChildren()) {
                             FoodModel food = foodSnap.getValue(FoodModel.class);
+                            food.setFoodId(foodSnap.getKey());  // ✅ Gán ID từ key Firebase
                             // ✅ Chỉ hiển thị món ăn có cùng CategoryId
                             if (food != null && categoryId != null && categoryId.equals(food.getCategoryId()) && categoryName != null) {
                                 foodList.add(food);

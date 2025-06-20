@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodapp.Model.FoodModel;
 import com.example.foodapp.R;
-import com.example.foodapp.Model.FoodItem;
 
 import java.util.List;
 
