@@ -16,13 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.foodapp.Adapter.CartAdapter;
 import com.example.foodapp.Model.CartItemModel;
 import com.example.foodapp.Model.FoodModel;
+import com.example.foodapp.Model.OrderModel;
 import com.example.foodapp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,48 +32,63 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
     private CartAdapter cartAdapter;
 
     private ImageView iconBack;
+    private Button btnPlaceOrder;
 
     private static final double DELIVERY_FEE = 3.00;
-
     private DatabaseReference cartRef;
+
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        // Ánh xạ các view
         textSubtotal = findViewById(R.id.textSubtotal);
         textDelivery = findViewById(R.id.textDelivery);
         textTotal = findViewById(R.id.textTotal);
         iconBack = findViewById(R.id.iconBack);
-
+        btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         recyclerViewCartItems = findViewById(R.id.recyclerViewCartItems);
         recyclerViewCartItems.setLayoutManager(new LinearLayoutManager(this));
 
-        // Khởi tạo danh sách và adapter
         cartList = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartList, this);
         recyclerViewCartItems.setAdapter(cartAdapter);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("CartActivity", "User ID: " + uid);
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         cartRef = FirebaseDatabase.getInstance().getReference("Carts").child(uid).child("items");
 
-        // Gọi hàm tải dữ liệu từ Firebase
         loadCartFromFirebase();
 
-        // Nút quay lại trang chủ
         iconBack.setOnClickListener(v -> {
             Intent intent = new Intent(CartActivity.this, UserpageActivity.class);
             startActivity(intent);
             finish();
         });
 
-        // Nút đặt hàng
-        Button btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         btnPlaceOrder.setOnClickListener(v -> {
+            if (cartList.isEmpty()) {
+                Toast.makeText(this, "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            // ✅ Tính tổng tiền
+            double subtotal = 0;
+            for (CartItemModel item : cartList) {
+                subtotal += item.getFood().getPrice() * item.getQuantity();
+            }
+
+            // ✅ Chuyển sang OrderActivity và truyền dữ liệu
+            Intent intent = new Intent(CartActivity.this, OrderActivity.class);
+            intent.putExtra("total", subtotal + DELIVERY_FEE);
+            intent.putExtra("uid", uid);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("cartList", new ArrayList<>(cartList)); // đảm bảo CartItemModel implements Serializable
+            intent.putExtras(bundle);
+
+            startActivity(intent);
         });
     }
 
@@ -100,20 +112,16 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
                                 String image = foodSnapshot.child("ImagePath").getValue(String.class);
                                 Double price = foodSnapshot.child("Price").getValue(Double.class);
 
-                                if (price == null) price = 0.0;
-
                                 CartItemModel model = new CartItemModel();
                                 model.setQuantity(quantity);
 
-                                // ✅ Tạo mới và gán FoodModel
                                 FoodModel food = new FoodModel();
                                 food.setTitle(title != null ? title : "");
                                 food.setImagePath(image != null ? image : "");
-                                food.setPrice(price);
+                                food.setPrice(price != null ? price : 0.0);
+                                food.setFoodId(foodId);
 
-
-                                model.setFood(food); // ✅ Gán food vào model
-
+                                model.setFood(food);
                                 cartList.add(model);
                                 cartAdapter.notifyDataSetChanged();
                                 updateSummary();
@@ -135,15 +143,11 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
         });
     }
 
-
-
-
     private void updateSummary() {
         double subtotal = 0;
         for (CartItemModel item : cartList) {
             subtotal += item.getFood().getPrice() * item.getQuantity();
         }
-
         double total = subtotal + DELIVERY_FEE;
 
         textSubtotal.setText(String.format("$%.2f", subtotal));

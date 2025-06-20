@@ -29,6 +29,8 @@
 
         <activity android:name=".Activity.FoodDetailActivity" />
 
+        <activity android:name=".Activity.OrderActivity" />
+
         <!-- Đây là activity chính của app -->
         <activity
             android:name=".Activity.MainActivity"

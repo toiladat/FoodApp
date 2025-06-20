@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,9 @@ import com.bumptech.glide.Glide;
 import com.example.foodapp.Model.CartItemModel;
 import com.example.foodapp.Model.FoodModel;
 import com.example.foodapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -75,6 +80,39 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             }
         });
 
+        holder.btnDelete.setOnClickListener(v -> {
+
+            // Lấy UID của người dùng hiện tại
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            // Lấy foodId từ model
+            String foodId = item.getFood().getFoodId();
+
+
+
+            // Tham chiếu đến node cần xóa trong Firebase
+            DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                    .getReference("Carts")
+                    .child(uid)
+                    .child("items")
+                    .child(foodId);
+
+            // Xoá dữ liệu khỏi Firebase
+            cartRef.removeValue()
+                    .addOnSuccessListener(aVoid -> {
+                        // Sau khi xoá thành công thì cập nhật giao diện
+                        cartList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, cartList.size());
+
+                        Toast.makeText(context, "Đã xoá khỏi giỏ hàng", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(context, "Xoá thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        });
+
+
     }
 
     @Override
@@ -88,6 +126,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         ImageButton btnMinus, btnPlus;
 
+        ImageButton btnDelete;
+
         public CartViewHolder(View itemView) {
             super(itemView);
             textName = itemView.findViewById(R.id.textName);
@@ -96,6 +136,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             imageView = itemView.findViewById(R.id.imageFood);
             btnMinus = itemView.findViewById(R.id.btnMinus);
             btnPlus = itemView.findViewById(R.id.btnPlus);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

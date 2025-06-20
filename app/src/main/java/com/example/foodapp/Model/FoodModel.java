@@ -1,6 +1,8 @@
 package com.example.foodapp.Model;
 
-public class FoodModel {
+import java.io.Serializable;
+
+public class FoodModel implements Serializable {
     private String foodId;
     private String Title;
     private String Description;
@@ -12,15 +14,9 @@ public class FoodModel {
 
     public FoodModel() {}
 
-    // 🆕 Getter & Setter cho foodId
-    public String getFoodId() {
-        return foodId;
-    }
-    public void setFoodId(String foodId) {
-        this.foodId = foodId;
-    }
+    public String getFoodId() { return foodId; }
+    public void setFoodId(String foodId) { this.foodId = foodId; }
 
-    // Getter & Setter
     public String getTitle() { return Title; }
     public void setTitle(String title) { Title = title; }
 
