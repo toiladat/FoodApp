@@ -1,8 +1,8 @@
 package com.example.foodapp.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,14 +18,12 @@ import com.example.foodapp.Model.CartItemModel;
 import com.example.foodapp.Model.FoodModel;
 import com.example.foodapp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CartActivity extends AppCompatActivity implements CartAdapter.OnQuantityChangeListener {
 
@@ -35,48 +33,68 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
     private CartAdapter cartAdapter;
 
     private ImageView iconBack;
+    private Button btnPlaceOrder;
 
     private static final double DELIVERY_FEE = 3.00;
-
     private DatabaseReference cartRef;
+    private String uid;
+    private Map<String, FoodModel> foodMap = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        // Ánh xạ các view
+        // Ánh xạ view
         textSubtotal = findViewById(R.id.textSubtotal);
         textDelivery = findViewById(R.id.textDelivery);
         textTotal = findViewById(R.id.textTotal);
         iconBack = findViewById(R.id.iconBack);
-
+        btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         recyclerViewCartItems = findViewById(R.id.recyclerViewCartItems);
         recyclerViewCartItems.setLayoutManager(new LinearLayoutManager(this));
 
-        // Khởi tạo danh sách và adapter
         cartList = new ArrayList<>();
-        cartAdapter = new CartAdapter(this, cartList, this);
+        cartAdapter = new CartAdapter(this, cartList, foodMap, this);
+
+
         recyclerViewCartItems.setAdapter(cartAdapter);
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Log.d("CartActivity", "User ID: " + uid);
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         cartRef = FirebaseDatabase.getInstance().getReference("Carts").child(uid).child("items");
 
-        // Gọi hàm tải dữ liệu từ Firebase
         loadCartFromFirebase();
 
-        // Nút quay lại trang chủ
         iconBack.setOnClickListener(v -> {
-            Intent intent = new Intent(CartActivity.this, UserpageActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(CartActivity.this, UserpageActivity.class));
             finish();
         });
 
-        // Nút đặt hàng
-        Button btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
         btnPlaceOrder.setOnClickListener(v -> {
+            if (cartList.isEmpty()) {
+                Toast.makeText(this, "Giỏ hàng trống", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            // ✅ Tính tổng tiền
+            double subtotal = 0;
+            for (CartItemModel item : cartList) {
+                subtotal += item.getPrice() * item.getQuantity();
+            }
+
+            double total = subtotal + DELIVERY_FEE;
+
+            // ✅ Chuyển sang OrderActivity và truyền dữ liệu
+            Intent intent = new Intent(CartActivity.this, OrderActivity.class);
+            intent.putExtra("total", total);
+            intent.putExtra("uid", uid);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("cartList", new ArrayList<>(cartList));
+            intent.putExtras(bundle);
+
+            startActivity(intent);
         });
     }
 
@@ -85,36 +103,50 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 cartList.clear();
+                foodMap.clear();  // ← Xóa map cũ để tránh dữ liệu trùng
+
+                int itemCount = (int) snapshot.getChildrenCount();
+                if (itemCount == 0) {
+                    cartAdapter.notifyDataSetChanged();
+                    updateSummary();
+                    return;
+                }
+
+                final int[] loadedCount = {0};
+
                 for (DataSnapshot itemSnapshot : snapshot.getChildren()) {
-                    String foodId = itemSnapshot.getKey();
+                    String foodId = itemSnapshot.child("foodId").getValue(String.class);
                     Integer quantity = itemSnapshot.child("quantity").getValue(Integer.class);
 
-                    if (foodId == null || quantity == null || quantity == 0) continue;
+                    if (foodId == null || quantity == null || quantity == 0) {
+                        loadedCount[0]++;
+                        if (loadedCount[0] == itemCount) {
+                            cartAdapter.notifyDataSetChanged();
+                            updateSummary();
+                        }
+                        continue;
+                    }
 
                     DatabaseReference foodRef = FirebaseDatabase.getInstance().getReference("Foods").child(foodId);
                     foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot foodSnapshot) {
                             if (foodSnapshot.exists()) {
-                                String title = foodSnapshot.child("Title").getValue(String.class);
-                                String image = foodSnapshot.child("ImagePath").getValue(String.class);
-                                Double price = foodSnapshot.child("Price").getValue(Double.class);
+                                FoodModel food = foodSnapshot.getValue(FoodModel.class);
+                                if (food != null) {
+                                    foodMap.put(foodId, food);  // 💡 Lưu thông tin món ăn
 
-                                if (price == null) price = 0.0;
+                                    CartItemModel item = new CartItemModel();
+                                    item.setFoodId(foodId);
+                                    item.setQuantity(quantity);
+                                    item.setPrice(food.getPrice());
 
-                                CartItemModel model = new CartItemModel();
-                                model.setQuantity(quantity);
+                                    cartList.add(item);
+                                }
+                            }
 
-                                // ✅ Tạo mới và gán FoodModel
-                                FoodModel food = new FoodModel();
-                                food.setTitle(title != null ? title : "");
-                                food.setImagePath(image != null ? image : "");
-                                food.setPrice(price);
-
-
-                                model.setFood(food); // ✅ Gán food vào model
-
-                                cartList.add(model);
+                            loadedCount[0]++;
+                            if (loadedCount[0] == itemCount) {
                                 cartAdapter.notifyDataSetChanged();
                                 updateSummary();
                             }
@@ -122,7 +154,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            Toast.makeText(CartActivity.this, "Lỗi tải món ăn", Toast.LENGTH_SHORT).show();
+                            loadedCount[0]++;
+                            Toast.makeText(CartActivity.this, "Lỗi khi tải món ăn", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -130,18 +163,15 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnQua
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(CartActivity.this, "Lỗi tải giỏ hàng", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartActivity.this, "Lỗi khi tải giỏ hàng", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
-
-
     private void updateSummary() {
         double subtotal = 0;
         for (CartItemModel item : cartList) {
-            subtotal += item.getFood().getPrice() * item.getQuantity();
+            subtotal += item.getPrice() * item.getQuantity();
         }
 
         double total = subtotal + DELIVERY_FEE;

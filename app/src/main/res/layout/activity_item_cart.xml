@@ -5,8 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
+    android:gravity="center_vertical"
     android:background="?android:selectableItemBackground">
 
+    <!-- Ảnh món ăn -->
     <ImageView
         android:id="@+id/imageFood"
         android:layout_width="80dp"
@@ -14,6 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background" />
 
+    <!-- Nội dung món -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,7 +28,7 @@
             android:id="@+id/textName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="Tên món"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#000000" />
@@ -34,12 +37,13 @@
             android:id="@+id/textPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="$10.00"
             android:textColor="#777777"
             android:layout_marginTop="4dp" />
 
+        <!-- Hàng chứa số lượng và nút xoá -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
@@ -51,7 +55,7 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_remove_circle"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Decrease quantity" />
+                android:contentDescription="Giảm số lượng" />
 
             <TextView
                 android:id="@+id/textQuantity"
@@ -68,7 +72,18 @@
                 android:layout_height="32dp"
                 android:src="@drawable/ic_plus"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Increase quantity" />
+                android:contentDescription="Tăng số lượng" />
+
+            <!-- Nút xoá -->
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_delete"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="@android:color/holo_red_dark"
+                android:contentDescription="Xoá món" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

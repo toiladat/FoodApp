@@ -1,47 +1,35 @@
 package com.example.foodapp.Model;
 
-public class CartItemModel {
-    private FoodModel food;           // Thông tin món ăn
-    private int quantity;             // Số lượng
-    private CouponModel coupon;       // Mã giảm giá áp dụng (nếu có)
+import java.io.Serializable;
 
+public class CartItemModel implements Serializable {
+    private String foodId;
+    private double price;
+    private int quantity;
 
-    public CartItemModel() {}
+    public CartItemModel() {}  // Constructor rỗng bắt buộc
 
-    // Getter & Setter cho FoodModel
-    public FoodModel getFood() {
-        return food;
+    public String getFoodId() {
+        return foodId;
     }
 
-    public void setFood(FoodModel food) {
-        this.food = food;
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
     }
 
-    // Getter & Setter cho quantity
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public int getQuantity() {
         return quantity;
     }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    // Getter & Setter cho CouponModel
-    public CouponModel getCoupon() {
-        return coupon;
-    }
-
-    public void setCoupon(CouponModel coupon) {
-        this.coupon = coupon;
-    }
-
-    // Hàm tính tổng giá tiền (áp dụng giảm giá nếu có coupon)
-    public double getTotalPrice() {
-        double originalPrice = food.getPrice() * quantity;
-        if (coupon != null && coupon.isActive()) {
-            double discount = coupon.getDiscountValue();
-            return Math.max(originalPrice - discount, 0); // tránh âm tiền
-        }
-        return originalPrice;
     }
 }
