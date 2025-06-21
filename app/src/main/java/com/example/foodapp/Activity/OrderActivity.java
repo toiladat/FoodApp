@@ -1,7 +1,9 @@
 package com.example.foodapp.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ public class OrderActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewBillItems;
     private TextView textTotalAmount;
+    private EditText editTextCouponCode, editTextAddress, editTextPhone;
     private Button btnPay, btnPayWithMomo;
 
     private List<CartItemModel> cartItemList;
@@ -35,6 +38,9 @@ public class OrderActivity extends AppCompatActivity {
 
         recyclerViewBillItems = findViewById(R.id.recyclerViewBillItems);
         textTotalAmount = findViewById(R.id.textTotalAmount);
+        editTextCouponCode = findViewById(R.id.editTextCouponCode);
+        editTextAddress = findViewById(R.id.editTextAddress);
+        editTextPhone = findViewById(R.id.editTextPhone);
         btnPay = findViewById(R.id.btnPay);
         btnPayWithMomo = findViewById(R.id.btnPayWithMomo);
 
@@ -48,6 +54,16 @@ public class OrderActivity extends AppCompatActivity {
         recyclerViewBillItems.setAdapter(new OrderItemAdapter(this, cartItemList));
 
         btnPay.setOnClickListener(v -> {
+            String couponCode = editTextCouponCode.getText().toString().trim();
+            String address = editTextAddress.getText().toString().trim();
+            String phone = editTextPhone.getText().toString().trim();
+
+            if (address.isEmpty() || phone.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ địa chỉ và số điện thoại", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Tạo đơn hàng
             DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Orders");
             String orderId = orderRef.push().getKey();
 
@@ -56,22 +72,23 @@ public class OrderActivity extends AppCompatActivity {
             order.setTotal(total);
             order.setCreatedAt(System.currentTimeMillis());
             order.setStatus("pending");
-            order.setCouponId(null);
-            order.setItems(cartItemList); //  truyền đúng list
+            order.setCouponId(couponCode.isEmpty() ? "0" : couponCode);
+            order.setAddress(address);
+            order.setPhone(phone);
+            order.setItems(cartItemList);
 
             assert orderId != null;
             orderRef.child(orderId).setValue(order)
                     .addOnSuccessListener(unused -> {
-                        //  Xoá giỏ hàng của user sau khi đặt hàng thành công
+                        // Xoá giỏ hàng của user sau khi đặt hàng thành công
                         FirebaseDatabase.getInstance().getReference("Carts").child(uid).removeValue();
 
-                        //  Hiển thị thông báo
                         Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
 
-                        //  Chuyển về trang chính
+                        // Quay về trang chính
                         Intent intent = new Intent(OrderActivity.this, UserpageActivity.class);
                         startActivity(intent);
-                        finish(); // Đóng activity hiện tại
+                        finish();
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -79,7 +96,8 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         btnPayWithMomo.setOnClickListener(v -> {
-
+            // TODO: Xử lý thanh toán bằng MoMo tại đây
+            Toast.makeText(this, "Tính năng MoMo chưa được tích hợp", Toast.LENGTH_SHORT).show();
         });
     }
 }

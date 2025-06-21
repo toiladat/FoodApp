@@ -117,17 +117,19 @@ public class FoodDetailActivity extends AppCompatActivity {
         String uid = user.getUid();
 
         CartItemModel cartItem = new CartItemModel();
-        cartItem.setFood(food);         // `food` là biến đã lấy từ Firebase ở `loadFoodDetail()`
-        cartItem.setQuantity(quantity); // số lượng đã chọn
-        cartItem.setCoupon(null);       // nếu chưa có mã giảm giá
+        cartItem.setFoodId(foodId); // dùng foodId
+        cartItem.setPrice(pricePerUnit); // giá lấy từ Firebase
+        cartItem.setQuantity(quantity); // số lượng người dùng chọn
 
         DatabaseReference cartRef = FirebaseDatabase.getInstance()
-                .getReference("Carts").child(uid).child("items").child(foodId);
+                .getReference("Carts")
+                .child(uid)
+                .child("items")
+                .child(foodId);
 
         cartRef.setValue(cartItem)
                 .addOnSuccessListener(aVoid -> Toast.makeText(this, "Đã thêm vào giỏ hàng", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(this, "Thêm thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
 
 }

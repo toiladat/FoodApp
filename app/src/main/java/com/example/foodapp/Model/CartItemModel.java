@@ -3,27 +3,33 @@ package com.example.foodapp.Model;
 import java.io.Serializable;
 
 public class CartItemModel implements Serializable {
-    private FoodModel food;
+    private String foodId;
+    private double price;
     private int quantity;
-    private CouponModel coupon;
 
-    public CartItemModel() {}
+    public CartItemModel() {}  // Constructor rỗng bắt buộc
 
-    public FoodModel getFood() { return food; }
-    public void setFood(FoodModel food) { this.food = food; }
+    public String getFoodId() {
+        return foodId;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setFoodId(String foodId) {
+        this.foodId = foodId;
+    }
 
-    public CouponModel getCoupon() { return coupon; }
-    public void setCoupon(CouponModel coupon) { this.coupon = coupon; }
+    public double getPrice() {
+        return price;
+    }
 
-    public double getTotalPrice() {
-        double originalPrice = food.getPrice() * quantity;
-        if (coupon != null && coupon.isActive()) {
-            double discount = coupon.getDiscountValue();
-            return Math.max(originalPrice - discount, 0);
-        }
-        return originalPrice;
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

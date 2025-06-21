@@ -35,6 +35,43 @@
         android:layout_weight="1"
         android:scrollbars="vertical" />
 
+    <!-- Mã giảm giá -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mã giảm giá" />
+    <EditText
+        android:id="@+id/editTextCouponCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập mã giảm giá (nếu có)"
+        android:inputType="text"
+        android:text="0"
+        android:padding="8dp"
+        android:textSize="14sp" />
+
+    <!-- Địa chỉ -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ nhận hàng" />
+    <EditText
+        android:id="@+id/editTextAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập địa chỉ" />
+
+    <!-- Số điện thoại -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Số điện thoại liên hệ" />
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập số điện thoại" />
+
     <!-- Tổng tiền -->
     <TextView
         android:id="@+id/textTotalAmount"
@@ -62,7 +99,7 @@
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:backgroundTint="#D81B60"
-            android:text="Thanh toán"
+            android:text="Đặt hàng"
             android:textColor="#FFFFFF" />
 
         <Button
